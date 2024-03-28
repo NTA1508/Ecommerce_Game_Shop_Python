@@ -26,7 +26,7 @@
                         <div class="text-center">
                             <!-- Product name-->
                             <h5 class="fw-bolder">{{ product.name }}</h5>
-                            <a href="">{{ product.category }}</a>                   
+                            <a href="" style = "text-decoration: none;">{{ product.category }}</a>                   
                             <hr>
                             <!-- Product price-->
                             <span class="text-muted text-decoration-line-through">${{ product.price }}</span>&nbsp;
@@ -35,7 +35,7 @@
                     </div>
                     <!-- Product actions-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{%url "product" product.id%}">View game</a></div>
                     </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
                       <!-- Product name -->
                       <h5 class="fw-bolder">{{ product.name }}</h5>
                       <!-- Product price -->
-                      <a href="">{{ product.category }}</a>                   
+                      <a href="" style = "text-decoration: none;">{{ product.category }}</a>                   
                       <hr>
                       ${{ product.price }}
                     </div>
@@ -58,7 +58,7 @@
                   <!-- Product actions -->
                   <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                     <div class="text-center">
-                      <a class="btn btn-outline-dark mt-auto" href="#">View options</a>
+                      <a class="btn btn-outline-dark mt-auto" href="{%url "product" product.id%}">View game</a>
                     </div>
                   </div>
                 </div>

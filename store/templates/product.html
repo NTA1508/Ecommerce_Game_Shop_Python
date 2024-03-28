@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="contact-title mb-2" style="font-style: italic; font-size: 15px; ">
+        <div class="contact-fix">
+            <span><a href="{%url "home"%}" style="color: #bdbdbd; text-decoration: none;">Home</a></span>
+            <span style="color: #616161;">/ {{ product.name }}</span>
+        </div>
+    </div>
+    
+    <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="..." style="width: 80%;">
+          </div>
+          <div class="col-md-8 ">
+            <div class="card-body">
+              <h2 class="card-title">{{product.name}}</h2>
+              <div class="container d-flex">
+                <p class="card-text">Tag: </p>
+                &nbsp;
+                <p class="btn btn-secondary" style="font-size: 10px">{{product.category}}</p>
+              </div>              
+              <hr>      
+              <p class="card-text">{{product.description}}</p>
+              <div class="container">
+                Price:
+                {% if product.is_sale %}
+                    <span class="text-muted text-decoration-line-through">${{ product.price }}</span>&nbsp; &nbsp;
+                    ${{ product.sale_price }}
+                {% else %}
+                    ${{ product.price }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}
