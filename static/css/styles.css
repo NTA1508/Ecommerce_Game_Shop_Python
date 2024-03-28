@@ -127,6 +127,7 @@ h1, .h1 {
     font-size: 2.5rem;
   }
 }
+
 h2, .h2 {
   font-size: calc(1.325rem + 0.9vw);
 }
@@ -10823,4 +10824,3 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-
