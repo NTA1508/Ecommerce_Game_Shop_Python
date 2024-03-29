@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <div class="contact-title mb-2" style="font-style: italic; font-size: 15px; ">
+    <div class="contact-title mb-2" style="font-style: italic; font-size: 17px; ">
         <div class="contact-fix">
             <span><a href="{%url "home"%}" style="color: #bdbdbd; text-decoration: none;">Home</a></span>
             <span style="color: #616161;">/ {{ product.name }}</span>
@@ -19,7 +19,8 @@
               <div class="container d-flex">
                 <p class="card-text">Tag: </p>
                 &nbsp;
-                <p class="btn btn-secondary" style="font-size: 10px">{{product.category}}</p>
+                <a href="{% url 'category' product.category %}" ><p class="btn btn-secondary" style="font-size: 10px">{{product.category}}</p></a>
+                
               </div>              
               <hr>      
               <p class="card-text">{{product.description}}</p>
@@ -32,9 +33,49 @@
                     ${{ product.price }}
                 {% endif %}
               </div>
+              <button class="btn btn-secondary" value="{{product.id}}" id="add-cart">Add to Cart</button>
             </div>
           </div>
         </div>
       </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var addButton = document.getElementById('add-cart');
+    if (addButton) {
+      addButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        var productId = document.getElementById('add-cart').value;
+        var csrfToken = '{{ csrf_token }}';
+        var url = "{% url 'cart_add' %}";
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken
+          },
+          body: 'product_id=' + encodeURIComponent(productId) + '&action=post'
+        })
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(function(json) {
+          console.log(json);
+          document.getElementById('cart_quantity').textContent = json.qty;
+        })
+        .catch(function(error) {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      });
+    }
+  });
+</script>
+
+
+
 {% endblock %}

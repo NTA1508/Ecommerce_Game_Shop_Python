@@ -1,54 +1,36 @@
-<style>
-  .card_hover{
-    transition: transform 0.3s ease;
-  }
-  
-  .card_hover:hover {
-    transform: scale(1.05);
-  }
-</style>
 {% extends "base.html" %}
 {% block content %}
     <!-- Header -->
-    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="5000" style="height: 510px;">
-          <img src="https://c4.wallpaperflare.com/wallpaper/139/265/83/video-game-ghost-of-tsushima-hd-wallpaper-preview.jpg" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item" data-bs-interval="5000" style="height: 510px">
-          <img src="https://i.rada.vn/data/image/2023/07/15/EA-SPORTS-FC-24-700.jpg" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item" data-bs-interval="5000" style="height: 510px">
-          <img src="https://d9n64ieh9hz8y.cloudfront.net/wp-content/uploads/20210504202143/hinh-anh-battlefield-6-bi-ro-ri-tin-game.jpg" class="d-block w-100" alt="...">
+      <div class="card text-bg-dark">
+        <img  style="height: 510px;" src="https://t4.ftcdn.net/jpg/03/34/19/13/360_F_334191354_zW1Fj9HPbfJdBPEVe2d6mcuT1w2g8K5y.jpg" class="card-img" alt="...">
+        <div class="card-img-overlay">
+          <h1 style="text-align: center; font-size: 150px; font-family: Dancing Script;  font-weight: bold;" class="card-title mt-5">Cart</h1>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
     <!-- Section -->
+    <div class="contact-title mb-2" style="font-style: italic; font-size: 17px; ">
+      <div class="contact-fix">
+          <span><a href="{%url "home"%}" style="color: #bdbdbd; text-decoration: none;">Home</a></span>
+          <span style="color: #616161;">/ Cart</span>
+      </div>
+    </div>
     <section class="py-5" style="background-color: #e0e0e0">
       <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
           {% for product in products %}
             {% if product.is_sale %}
               <div class="col mb-5">
-                <div class="card h-100 card_hover">
+                <div class="card h-100">
                     <!-- Sale badge-->
                     <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
                     <!-- Product image-->
-                    <img style="height: 390px;" class="card-img-top" src="{{ product.image.url }}" alt="..." />
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
                             <!-- Product name-->
                             <h5 class="fw-bolder">{{ product.name }}</h5>
-                            <a href="{% url 'category' product.category %}" style = "text-decoration: none;">{{ product.category }}</a>                   
+                            <a href="" style = "text-decoration: none;">{{ product.category }}</a>                   
                             <hr>
                             <!-- Product price-->
                             <span class="text-muted text-decoration-line-through">${{ product.price }}</span>&nbsp;
@@ -63,16 +45,16 @@
               </div>
             {% else %}
               <div class="col mb-5">
-                <div class="card h-100 card_hover">
+                <div class="card h-100">
                   <!-- Product image -->
-                  <img style="height: 390px;" class="card-img-top" src="{{ product.image.url }}" alt="..." />
+                  <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
                   <!-- Product details -->
                   <div class="card-body p-4">
                     <div class="text-center">
                       <!-- Product name -->
                       <h5 class="fw-bolder">{{ product.name }}</h5>
                       <!-- Product price -->
-                      <a href="{% url 'category' product.category %}" style = "text-decoration: none;">{{ product.category }}</a>                   
+                      <a href="" style = "text-decoration: none;">{{ product.category }}</a>                   
                       <hr>
                       ${{ product.price }}
                     </div>
