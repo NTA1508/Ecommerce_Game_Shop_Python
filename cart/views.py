@@ -10,11 +10,11 @@ def cart_summary(req):
     quantities = cart.get_quants
     return render(req, "cart_summary.html", {'cart_products': cart_products, 'quantities': quantities})
 
-def cart_add(request):
-    cart = Cart(request)
-    if request.method == 'POST' and request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('product_id'))
-        product_qty = int(request.POST.get('product_qty'))
+def cart_add(req):
+    cart = Cart(req)
+    if req.method == 'POST' and req.POST.get('action') == 'post':
+        product_id = int(req.POST.get('product_id'))
+        product_qty = int(req.POST.get('product_qty'))
         
         product = get_object_or_404(Product, id=product_id)
         cart.add(product=product, quantity=product_qty)
@@ -30,4 +30,12 @@ def cart_delete(req):
     pass
     
 def cart_update(req):
-    pass
+    cart = Cart(req)
+    if req.method == 'POST' and req.POST.get('action') == 'post':
+        product_id = int(req.POST.get('product_id'))
+        product_qty = int(req.POST.get('product_qty'))
+        
+        cart.update(product = product_id, quantity = product_qty)
+        
+        response = JsonResponse({'qty': product_qty})
+        return response

@@ -2,22 +2,22 @@
 {% block content %}
   <!-- Header -->
   <div class="card text-bg-dark">
-      <img  style="height: 510px;" src="https://t4.ftcdn.net/jpg/03/34/19/13/360_F_334191354_zW1Fj9HPbfJdBPEVe2d6mcuT1w2g8K5y.jpg" class="card-img" alt="...">
+      <img style="height: 510px;" src="https://t4.ftcdn.net/jpg/03/34/19/13/360_F_334191354_zW1Fj9HPbfJdBPEVe2d6mcuT1w2g8K5y.jpg" class="card-img" alt="...">
       <div class="card-img-overlay">
-          <h1 style="text-align: center; font-size: 150px; font-family: Dancing Script;  font-weight: bold;" class="card-title mt-5">Cart</h1>
+          <h1 style="text-align: center; font-size: 150px; font-family: Dancing Script; font-weight: bold;" class="card-title mt-5">Cart</h1>
       </div>
   </div>
   <!-- Section -->
-  <div class="contact-title mb-2" style="font-style: italic; font-size: 17px; ">
+  <div class="contact-title mb-2" style="font-style: italic; font-size: 17px;">
       <div class="contact-fix">
-          <span><a href="{%url "home"%}" style="color: #bdbdbd; text-decoration: none;">Home</a></span>
+          <span><a href="{% url 'home' %}" style="color: #bdbdbd; text-decoration: none;">Home</a></span>
           <span style="color: #616161;">/ Cart</span>
       </div>
   </div>
-  <div class="comtainer">
+  <div class="container">
       {% if cart_products %}
         <table class="table table-bordered table-striped">
-            <thead class="bg-black text-white"  style="text-align: center;">
+            <thead class="bg-black text-white" style="text-align: center;">
                 <tr>
                     <th scope="col">Image</th>
                     <th scope="col">Name</th>
@@ -27,28 +27,23 @@
                     <th scope="col">Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="text-align: center;">
                 {% for product in cart_products %}
-                  <tr> 
+                  <tr>
                       <td style="width: 20%"><img style="width: 25%" src="{{ product.image.url }}" alt=""></td>
-                      <td>{{product}}</td>
-                      <td>{{product.category}}</td>
+                      <td>{{ product }}</td>
+                      <td style="font-style: italic">{{ product.category }}</td>
                       {% if product.is_sale %}
                         <td><span class="text-muted text-decoration-line-through">${{ product.price }}</span>&nbsp;
                           ${{ product.sale_price }}</td>
                       {% else %}
-                        <td>${{product.price}}</td>
+                        <td>${{ product.price }}</td>
                       {% endif %}
-                      <td>      
-                        {% for key, value in quantities.items %}
-                          {% if key == product.id|slugify %}
-                            {{ value }}
-                          {% endif %}
-                        {% endfor %}                            
-                          {% comment %} <select class="form-select form-select-sm" id="qty-cart">
+                      <td>
+                          <select class="form-select form-select-sm" id="select{{ product.id }}">
                               {% for key, value in quantities.items %}
                                 {% if key == product.id|slugify %}
-                                  {{ value }}
+                                  <option selected>{{ value }}</option>
                                 {% endif %}
                               {% endfor %}
                               <option value="1">1</option>
@@ -56,25 +51,41 @@
                               <option value="3">3</option>
                               <option value="4">4</option>
                               <option value="5">5</option>
-                          </select> {% endcomment %}
+                          </select>
                       </td>
-                      <td style="width: 15%">
-                          <a class="btn btn-outline-dark text-white" style="background-color: #1b5e20;" href="#">Update</a>
-                          &nbsp;
-                          <a class="btn btn-outline-dark text-white" style="background-color: #d50000;" href="#">Delete</a>
+                      <td class="align-items-center" style="width: 15%">
+                        <button type="button" class="btn btn-outline-dark text-white update-cart" style="background-color: #1b5e20; border: none" data-index="{{ product.id }}"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-outline-dark text-white" style="background-color: #d50000; border: none"><i class="bi bi-trash"></i></button>
                       </td>
                   </tr>
                 {% endfor %}
-                <tr>
-                    <td>The number of products: {{cart|length}}</td>
-                    <td></td>
-                    <td></td>
-                    <td>Total price: </td>
-                </tr>
             </tbody>
         </table>
       {% else %}
         <h1>There's Nothing In Your Cart...</h1>
       {% endif %}
   </div>
-{% endblock  %}
+
+  <script>
+    $(document).on('click', '.update-cart', function (e) {
+        e.preventDefault();
+        var productId = $(this).data('index');
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart_update' %}",
+            data: {
+                product_id: $(this).data('index'),
+                product_qty: $('#select' + productId + ' option:selected').text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function (json) {
+                location.reload();
+            },
+            error: function (xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    });
+  </script>
+{% endblock %}
