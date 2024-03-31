@@ -69,6 +69,7 @@
                 success: function (json) {
                     document.getElementById("cart_quantity").textContent = json.qty; // Fixed setting textContent
                     console.log(json);
+                    location.reload();
                 },
                 error: function (xhr, errmsg, err) {
                     console.log(errmsg);

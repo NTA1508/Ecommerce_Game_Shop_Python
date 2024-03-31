@@ -43,9 +43,14 @@
         &nbsp;
         <div class="consetetur-fluid d-flex">
           {% if user.is_authenticated %}
-            <form class="d-flex">
-              <a class="btn btn-outline-dark" href="{%url "logout"%}">Logout</a>
-            </form>
+            <div class="dropdown " style="margin-left: 10px;">
+              <a class="bi bi-person-circle nav-link" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 35px;"></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{%url "update_user"%}" style="text-decoration: none; color: black;">Profile</a></li>
+                <li><a class="dropdown-item" href="{%url "update_password"%}" style="text-decoration: none; color: black;">Change Password</a></li>
+                <li><a class="dropdown-item" href="{%url "logout"%}" style="text-decoration: none; color: black;">Logout</a></li>
+              </ul>
+            </div>
           {% else %}
             <form class="d-flex">
               &nbsp;
