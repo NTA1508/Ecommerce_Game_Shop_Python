@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category
+from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 
 def home(req):
     products = Product.objects.all()
@@ -44,8 +44,8 @@ def register_user(req):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(req, user)
-            messages.success(req, "You have successfully registered!")
-            return redirect('home')
+            messages.success(req, "You have successfully registered! Fill out your information...")
+            return redirect('update_info')
     
     return render(req, "register.html", {'form': form})
 
@@ -95,6 +95,19 @@ def update_password(req):
         else:
             form = ChangePasswordForm(current_user)
             return render(req, "update_password.html", {'form': form})
+    else:
+        messages.error(req, "Please Login!")
+        return redirect('home')
+
+def update_info(req):
+    if req.user.is_authenticated:
+        current_user = Profile.objects.get(user__id=req.user.id)
+        form = UserInfoForm(req.POST or None, instance = current_user)
+        if form.is_valid():
+            form.save()
+            messages.success(req, "User information has been updated!")
+            return redirect('home')
+        return render(req, "update_info.html", {'form': form})
     else:
         messages.error(req, "Please Login!")
         return redirect('home')
