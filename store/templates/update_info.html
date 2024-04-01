@@ -5,10 +5,15 @@
         <div class="col-md-4 offset-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="text-center">User's Information</h4>                              
+                    <h4 class="text-center">User's Information</h4>   
+                    <strong>Billing Information</strong>      
+                    <br>                     
                     <form method="POST" action="{% url 'update_info' %}">
                         {% csrf_token %}
                         {{form.as_p}}
+                        <br>
+                        <strong>Shipping Information</strong>
+                        <br>
                         <div class="text-center mt-2">
                             <button type="submit" class="btn btn-secondary">Save</button><br>
                         </div> 

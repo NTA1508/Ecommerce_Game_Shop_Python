@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from django.db.models import Q
+import json
+from cart.cart import Cart
 
 def home(req):
     products = Product.objects.all()
@@ -21,6 +24,16 @@ def login_user(req):
         user = authenticate(req, username=username, password=password)
         if user is not None:
             login(req, user)
+            
+            current_user = Profile.objects.get(user__id = req.user.id)
+            saved_cart = current_user.old_cart
+            if saved_cart:
+                converted_cart = json.loads(saved_cart)
+                cart = Cart(req)
+                
+                for key, value in converted_cart.items():
+                    cart.db_add(product=key, quantity=value)
+                    
             messages.success(req, "Login successful!!!")
             return redirect('home')
         else:
@@ -101,13 +114,27 @@ def update_password(req):
 
 def update_info(req):
     if req.user.is_authenticated:
-        current_user = Profile.objects.get(user__id=req.user.id)
+        current_user = Profile.objects.get(user__id=req.user.id)       
+        
         form = UserInfoForm(req.POST or None, instance = current_user)
         if form.is_valid():
             form.save()
             messages.success(req, "User information has been updated!")
             return redirect('home')
-        return render(req, "update_info.html", {'form': form})
+        return render(req, "update_info.html", {'form': form,})
     else:
         messages.error(req, "Please Login!")
         return redirect('home')
+    
+def search(req):
+    if req.method == "POST":
+        searched = req.POST['searched']
+        
+        searched = Product.objects.filter(Q(name__icontains = searched))
+        if not searched:
+            messages.error(req, "That Game Does Not Exist...")
+            return render(req, "search.html", {})
+        else:
+            return render(req, "search.html", {'searched': searched})
+    else:        
+        return render(req, "search.html", {})
